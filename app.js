@@ -186,14 +186,23 @@ function chars(input) {
 // Any additional functions can be written below this line 👇. Happy Coding! 😁
 
 function searchByTraits() {
-  let genderInput = prompt("What gender is this person?");
-  let personsByGender = data.filter(function (person) {
-    return person.gender === genderInput;
-  });
-  let eyeColorInput = prompt("What is eye color of the person?");
-  let personsByEyeColor = personsByGender.filter(function (person) {
-    return person.eyeColor === eyeColorInput;
-  });
-  console.log(personsByEyeColor);
-  return personsByEyeColor;
+  singleCriteria()
+}
+
+function singleCriteriaPrompt(){
+  let criteriaArray = []
+  let userCriteriaChoice = prompt("Please type in single search criteria\n(Example) gender")
+  criteriaArray.push(userCriteriaChoice)
+  let userCriteriaValue = prompt(`Please enter value for ${userCriteriaChoice}`)
+  criteriaArray.push(userCriteriaValue)
+  return criteriaArray
+}
+
+function singleCriteria(){
+  let userCriteria = singleCriteriaPrompt();
+    let personsArray = data.filter(function(person){
+      return person[userCriteria[0]] === userCriteria[1];
+    })
+    displayPeople(personsArray);
+    return personsArray;
 }

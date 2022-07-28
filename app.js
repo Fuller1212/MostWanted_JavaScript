@@ -185,24 +185,31 @@ function chars(input) {
 //////////////////////////////////////////* End Of Starter Code *//////////////////////////////////////////
 // Any additional functions can be written below this line 👇. Happy Coding! 😁
 
-function searchByTraits() {
-  singleCriteria()
+function searchByTraits(people) {
 }
 
-function singleCriteriaPrompt(){
-  let criteriaArray = []
-  let userCriteriaChoice = prompt("Please type in single search criteria\n(Example) gender")
-  criteriaArray.push(userCriteriaChoice)
-  let userCriteriaValue = prompt(`Please enter value for ${userCriteriaChoice}`)
-  criteriaArray.push(userCriteriaValue)
-  return criteriaArray
+function traitPrompt(){
+  let traitArray = []
+  let userTraitChoice = prompt("Please type in single search Trait\n(Example) gender")
+  traitArray.push(userTraitChoice)
+  let userTraitValue = prompt(`Please enter value for ${userTraitChoice}`)
+  traitArray.push(userTraitValue)
+  return traitArray
 }
 
-function singleCriteria(){
-  let userCriteria = singleCriteriaPrompt();
-    let personsArray = data.filter(function(person){
-      return person[userCriteria[0]] === userCriteria[1];
+function peopleBySingleTrait(people){
+  let trait = traitPrompt();
+    let personsArray = people.filter(function(person){
+      return person[trait[0]] == trait[1];
     })
     displayPeople(personsArray);
     return personsArray;
+}
+
+function peopleByMultipleTraits(people){
+  let traits = traitPrompt();
+  let personsArray = people.filter(function(person){
+    return person[traits[0]] == traits[1]
+  });
+  return personsArray
 }

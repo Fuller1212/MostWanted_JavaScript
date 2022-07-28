@@ -189,12 +189,28 @@ function searchByTraits(people) {
 }
 
 function traitPrompt(){
-  let traitArray = []
-  let userTraitChoice = prompt("Please type in single search Trait\n(Example) gender")
-  traitArray.push(userTraitChoice)
-  let userTraitValue = prompt(`Please enter value for ${userTraitChoice}`)
-  traitArray.push(userTraitValue)
-  return traitArray
+  let traits = []
+  let traitPrompt = prompt("Please enter trait type\nPossible trait type: gender, dob, height, weight, eyecolor, occupation".trim());
+  if (traitPrompt === "eyecolor"){
+    traitPrompt = "eyeColor";
+    traits.push(traitPrompt)
+  }
+  else if (traitPrompt == ""){
+    return traitPrompt()
+  }
+  else {
+    traits.push(traitPrompt);
+  }
+  if (traitPrompt == "dob"){
+    alert("For DOB input, please format as M/D/YYYY")
+    let traitValuePrompt = prompt(`Exapmle: 2/16/1940 or 12/12/1940 or 12/6/1940\n\nPlease enter value for ${traitPrompt.toLowerCase()}`);
+    traits.push(traitValuePrompt)
+  }
+  else{
+    let traitValuePrompt = prompt(`Please enter value for ${traitPrompt.toLowerCase()}`);
+    traits.push(traitValuePrompt)
+  }
+  return traits;
 }
 
 function peopleBySingleTrait(people){

@@ -140,6 +140,12 @@ function displayPeople(people) {
 function displayPerson(person) {
   let personInfo = `First Name: ${person.firstName}\n`;
   personInfo += `Last Name: ${person.lastName}\n`;
+  personInfo += `Gender: ${person.gender}\n`;
+  personInfo += `DOB: ${person.dob}\n`;
+  personInfo += `Height: ${person.height}\n`;
+  personInfo += `Weight: ${person.weight}\n`;
+  personInfo += `Eye Color: ${person.eyeColor}\n`;
+  personInfo += `Occupation: ${person.occupation}\n`;
   //! TODO #1a: finish getting the rest of the information to display //////////////////////////////////////////
   alert(personInfo);
 }
@@ -186,6 +192,27 @@ function chars(input) {
 // Any additional functions can be written below this line 👇. Happy Coding! 😁
 
 function searchByTraits(people) {
+  let peopleFound = peopleBySingleTrait(people);
+  if(!peopleFound[0]){
+    alert("Could not find that individual. \n\nPlease start over!");
+    return searchByTraits(people);
+  }
+  else if(peopleFound[0] && !peopleFound[1]){
+    return mainMenu(peopleFound, people);
+  }
+  while (true){
+    if (peopleFound[1]){
+      displayPeople(peopleFound);
+      peopleFound = peopleByMultipleTraits(peopleFound)
+    }
+    else if(!peopleFound[0]){
+      alert("Could not find that individual.\n\nPlease start over!")
+      return searchByTraits(people)
+    }
+    else{
+      return mainMenu(peopleFound, people);
+    }
+  }
 }
 
 function traitPrompt(){
@@ -217,8 +244,7 @@ function peopleBySingleTrait(people){
   let trait = traitPrompt();
     let personsArray = people.filter(function(person){
       return person[trait[0]] == trait[1];
-    })
-    displayPeople(personsArray);
+    });
     return personsArray;
 }
 
@@ -228,4 +254,8 @@ function peopleByMultipleTraits(people){
     return person[traits[0]] == traits[1]
   });
   return personsArray
+}
+
+function findPersonFamily(person, people){
+  
 }

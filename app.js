@@ -193,69 +193,119 @@ function chars(input) {
 
 function searchByTraits(people) {
   let peopleFound = peopleBySingleTrait(people);
-  if(!peopleFound[0]){
+  if (!peopleFound[0]) {
     alert("Could not find that individual. \n\nPlease start over!");
     return searchByTraits(people);
-  }
-  else if(peopleFound[0] && !peopleFound[1]){
+  } else if (peopleFound[0] && !peopleFound[1]) {
     return mainMenu(peopleFound, people);
   }
-  while (true){
-    if (peopleFound[1]){
+  while (true) {
+    if (peopleFound[1]) {
       displayPeople(peopleFound);
-      peopleFound = peopleByMultipleTraits(peopleFound)
-    }
-    else if(!peopleFound[0]){
-      alert("Could not find that individual.\n\nPlease start over!")
-      return searchByTraits(people)
-    }
-    else{
+      peopleFound = peopleByMultipleTraits(peopleFound);
+    } else if (!peopleFound[0]) {
+      alert("Could not find that individual.\n\nPlease start over!");
+      return searchByTraits(people);
+    } else {
       return mainMenu(peopleFound, people);
     }
   }
 }
 
-function traitPrompt(){
-  let traits = []
-  let traitPrompt = prompt("Please enter trait type\nPossible trait type: gender, dob, height, weight, eyecolor, occupation".trim());
-  if (traitPrompt === "eyecolor"){
+function traitPrompt() {
+  let traits = [];
+  let traitPrompt = prompt(
+    "Please enter trait type\nPossible trait type: gender, dob, height, weight, eyecolor, occupation".trim()
+  );
+  if (traitPrompt === "eyecolor") {
     traitPrompt = "eyeColor";
-    traits.push(traitPrompt)
-  }
-  else if (traitPrompt == ""){
-    return traitPrompt()
-  }
-  else {
+    traits.push(traitPrompt);
+  } else if (traitPrompt == "") {
+    return traitPrompt();
+  } else {
     traits.push(traitPrompt);
   }
-  if (traitPrompt == "dob"){
-    alert("For DOB input, please format as M/D/YYYY")
-    let traitValuePrompt = prompt(`Exapmle: 2/16/1940 or 12/12/1940 or 12/6/1940\n\nPlease enter value for ${traitPrompt.toLowerCase()}`);
-    traits.push(traitValuePrompt)
-  }
-  else{
-    let traitValuePrompt = prompt(`Please enter value for ${traitPrompt.toLowerCase()}`);
-    traits.push(traitValuePrompt)
+  if (traitPrompt == "dob") {
+    alert("For DOB input, please format as M/D/YYYY");
+    let traitValuePrompt = prompt(
+      `Exapmle: 2/16/1940 or 12/12/1940 or 12/6/1940\n\nPlease enter value for ${traitPrompt.toLowerCase()}`
+    );
+    traits.push(traitValuePrompt);
+  } else {
+    let traitValuePrompt = prompt(
+      `Please enter value for ${traitPrompt.toLowerCase()}`
+    );
+    traits.push(traitValuePrompt);
   }
   return traits;
 }
 
-function peopleBySingleTrait(people){
+function peopleBySingleTrait(people) {
   let trait = traitPrompt();
-    let personsArray = people.filter(function(person){
-      return person[trait[0]] == trait[1];
-    });
-    return personsArray;
-}
-
-function peopleByMultipleTraits(people){
-  let traits = traitPrompt();
-  let personsArray = people.filter(function(person){
-    return person[traits[0]] == traits[1]
+  let personsArray = people.filter(function (person) {
+    return person[trait[0]] == trait[1];
   });
-  return personsArray
+  return personsArray;
 }
 
-function findPersonFamily(person, people){
-  
+function peopleByMultipleTraits(people) {
+  let traits = traitPrompt();
+  let personsArray = people.filter(function (person) {
+    return person[traits[0]] == traits[1];
+  });
+  return personsArray;
+}
+
+function findPersonFamily(personFound, people) {
+  let familyMembers = [];
+  let spouse = personSpouse(personFound, people);
+  if (spouse[0]) {
+    spouse[0].firstName = `Spouse: ${spouse[0].firstName}`;
+    familyMembers.push(spouse[0]);
+  } else if (!spouse[0]) {
+    spouse.firstName = `Spouse: `;
+    spouse.lastName = "None";
+    familyMembers.push(spouse);
+  }
+  let parents = personParents(personFound, people);
+  if (parents[1]) {
+    familyMembers.push(parents[0], parents[1]);
+  } else if (!parents[1]) {
+    familyMembers.push(parents[0]);
+  }
+  parents[0].firstName = `Parents: ${parents[0].firstName}`;
+  displayPeople(familyMembers);
+}
+
+// let spouse = people.filter(function (person) {
+//   if (personFound.currentSpouse == person.id) return true;
+// });
+// familyMembers.push(spouse);
+// let sibling = people.filter(function (person) {
+//   return (
+//     personFound.parrents == person.parents && personFound.id !== person.id
+//   );
+// });
+// if (spouse[0]) {
+//   familyMembers.push(spouse);
+// } else if (sibling[0] && sibling !== []) {
+//   familyMembers.push(sibling);
+// }
+
+// return familyMembers;
+
+function personSpouse(personFound, people) {
+  let spouse = people.filter(function (person) {
+    if (personFound.currentSpouse == person.id) {
+      return true;
+    }
+  });
+  return spouse;
+}
+
+function personParents(personFound, people) {
+  let parents = people.filter(function (person) {
+    if (personFound.parents.includes(person.id)) return true;
+  });
+  return parents;
 }

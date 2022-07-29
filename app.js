@@ -87,7 +87,7 @@ function mainMenu(person, people) {
       break;
     case "quit":
       // Stop application execution
-      return;
+      return stop();
     default:
       // Prompt user again. Another instance of recursion
       return mainMenu(person, people);

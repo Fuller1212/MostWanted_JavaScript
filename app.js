@@ -146,8 +146,8 @@ function displayPerson(person) {
   personInfo += `Weight: ${person.weight}\n`;
   personInfo += `Eye Color: ${person.eyeColor}\n`;
   personInfo += `Occupation: ${person.occupation}\n`;
+  return personInfo;
   //! TODO #1a: finish getting the rest of the information to display //////////////////////////////////////////
-  alert(personInfo);
 }
 // End of displayPerson()
 
@@ -191,27 +191,27 @@ function chars(input) {
 //////////////////////////////////////////* End Of Starter Code *//////////////////////////////////////////
 // Any additional functions can be written below this line 👇. Happy Coding! 😁
 
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^//
+///////////////////////////////// Search By Traits Section //////////////////////////////////////////////////
+//-----------------------------👇-----------👇------------👇-----------------------------------------------//
+
+// \/\/\/ SearchByTraits \/\/\/ --- Calls traitPrompts() and Displaying People Based On Trait Input//////////
 function searchByTraits(people) {
-  let peopleFound = peopleBySingleTrait(people);
-  if (!peopleFound[0]) {
-    alert("Could not find that individual. \n\nPlease start over!");
-    return searchByTraits(people);
-  } else if (peopleFound[0] && !peopleFound[1]) {
-    return mainMenu(peopleFound, people);
-  }
-  while (true) {
-    if (peopleFound[1]) {
-      displayPeople(peopleFound);
-      peopleFound = peopleByMultipleTraits(peopleFound);
-    } else if (!peopleFound[0]) {
-      alert("Could not find that individual.\n\nPlease start over!");
+  let peopleFound = peopleByTrait(people);
+  while (true)
+    if (!peopleFound[0]) {
+      alert("Could not find that individual. \n\nPlease start over!");
       return searchByTraits(people);
-    } else {
+    } else if (peopleFound[0] && !peopleFound[1]) {
       return mainMenu(peopleFound, people);
+    } else {
+      people = peopleFound;
+      displayPeople(people);
+      return searchByTraits(people);
     }
-  }
 }
 
+// \/\/\/ TraitPrompts \/\/\/ --- Includes Prompts For TraitName and TraitsValue, Returns Array With Prompt Inputs//
 function traitPrompt() {
   let traits = [];
   let traitPrompt = prompt(
@@ -240,7 +240,8 @@ function traitPrompt() {
   return traits;
 }
 
-function peopleBySingleTrait(people) {
+// \/\/\/ PeopleByTrait \/\/\/ --- Filtering People By Trait and Returns Them as Array of Objects////////////
+function peopleByTrait(people) {
   let trait = traitPrompt();
   let personsArray = people.filter(function (person) {
     return person[trait[0]] == trait[1];
@@ -248,64 +249,67 @@ function peopleBySingleTrait(people) {
   return personsArray;
 }
 
-function peopleByMultipleTraits(people) {
-  let traits = traitPrompt();
-  let personsArray = people.filter(function (person) {
-    return person[traits[0]] == traits[1];
-  });
-  return personsArray;
-}
+//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^//
+///////////////////////////////// Person Family Section /////////////////////////////////////////////////////
+//-----------------------------👇----------👇----------👇--------------------------------------------------//
 
+// \/\/\/ FindPersonFamily \/\/\/ --- Calls displayPersonFamily() and Returns It As Interpolated String /////
 function findPersonFamily(personFound, people) {
-  let familyMembers = [];
-  let spouse = personSpouse(personFound, people);
-  if (spouse[0]) {
-    spouse[0].firstName = `Spouse: ${spouse[0].firstName}`;
-    familyMembers.push(spouse[0]);
-  } else if (!spouse[0]) {
-    spouse.firstName = `Spouse: `;
-    spouse.lastName = "None";
-    familyMembers.push(spouse);
-  }
-  let parents = personParents(personFound, people);
-  if (parents[1]) {
-    familyMembers.push(parents[0], parents[1]);
-  } else if (!parents[1]) {
-    familyMembers.push(parents[0]);
-  }
-  parents[0].firstName = `Parents: ${parents[0].firstName}`;
-  displayPeople(familyMembers);
+  let personFamily = displayPersonFamily(personFound, people);
+  return personFamily;
 }
 
-// let spouse = people.filter(function (person) {
-//   if (personFound.currentSpouse == person.id) return true;
-// });
-// familyMembers.push(spouse);
-// let sibling = people.filter(function (person) {
-//   return (
-//     personFound.parrents == person.parents && personFound.id !== person.id
-//   );
-// });
-// if (spouse[0]) {
-//   familyMembers.push(spouse);
-// } else if (sibling[0] && sibling !== []) {
-//   familyMembers.push(sibling);
-// }
+// \/\/\/ DisplayPersonFamily \/\/\/ --- Collects All Family Members and Returns Interpolated String ////////
+function displayPersonFamily(personFound, people) {
+  let spouse = findPersonSpouse(personFound, people);
+  let parents = findPersonParents(personFound, people);
+  return `${spouse}\n${parents}`;
+}
 
-// return familyMembers;
-
-function personSpouse(personFound, people) {
-  let spouse = people.filter(function (person) {
+// \/\/\/ FindPersonSpouse \/\/\/ --- Filtering People Array to Find Person Spouse //////////////////////////
+function findPersonSpouse(personFound, people) {
+  let spouseFound = people.filter(function (person) {
     if (personFound.currentSpouse == person.id) {
       return true;
     }
   });
+  let spouse = spouseDictionary(spouseFound);
   return spouse;
 }
 
-function personParents(personFound, people) {
-  let parents = people.filter(function (person) {
+// \/\/\/ SpouseDictionary \/\/\/ --- Returns spouseString as Interpolated String of Spouse Full Name //////
+function spouseDictionary(spouse) {
+  if (spouse[0]) {
+    let spouseString = "Spouse: ";
+    spouseString += `${spouse[0].firstName} ${spouse[0].lastName}`;
+    return spouseString;
+  } else if (!spouse[0]) {
+    let spouseString = "Spouse: None";
+    return spouseString;
+  }
+}
+
+// \/\/\/ FindPersonParents \/\/\/ --- Filtering People Array to Find Person Parents ///////////////////////
+function findPersonParents(personFound, people) {
+  let Foundparents = people.filter(function (person) {
     if (personFound.parents.includes(person.id)) return true;
   });
+  let parents = parentsDictionary(Foundparents);
   return parents;
+}
+
+// \/\/\/ ParentsDictionary \/\/\/ --- Returns parentsString as Interpolated String of Parents Full Names //
+function parentsDictionary(parents) {
+  if (parents[0] && parents[1]) {
+    let parentsString = "Parents: ";
+    parentsString += `${parents[0].firstName} ${parents[0].lastName}; ${parents[1].firstName} ${parents[1].lastName}`;
+    return parentsString;
+  } else if (!parents[0]) {
+    let parentsString = "Parents: None";
+    return parentsString;
+  } else if (parents[0] && !parents[1]) {
+    let parentsString = "Parent: ";
+    parentsString += `${parents[0].firstName} ${parents[0].lastName}`;
+    return parentsString;
+  }
 }

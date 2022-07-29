@@ -263,7 +263,8 @@ function findPersonFamily(personFound, people) {
 function displayPersonFamily(personFound, people) {
   let spouse = findPersonSpouse(personFound, people);
   let parents = findPersonParents(personFound, people);
-  return `${spouse}\n${parents}`;
+  let siblings = findPersonSibling(personFound, people)
+  return `${spouse}\n${parents}\n${siblings}`;
 }
 
 // \/\/\/ FindPersonSpouse \/\/\/ --- Filtering People Array to Find Person Spouse //////////////////////////
@@ -291,10 +292,10 @@ function spouseDictionary(spouse) {
 
 // \/\/\/ FindPersonParents \/\/\/ --- Filtering People Array to Find Person Parents ///////////////////////
 function findPersonParents(personFound, people) {
-  let Foundparents = people.filter(function (person) {
+  let foundParents = people.filter(function (person) {
     if (personFound.parents.includes(person.id)) return true;
   });
-  let parents = parentsDictionary(Foundparents);
+  let parents = parentsDictionary(foundParents);
   return parents;
 }
 
@@ -313,3 +314,29 @@ function parentsDictionary(parents) {
     return parentsString;
   }
 }
+
+function findPersonSibling(personFound,people){
+let foundSiblings = people.filter(function(person){
+  if(person.parents.includes(personFound.parents[0]) && personFound.id !== person.id || person.parents.includes(personFound.parents[1]) && personFound.id !== person.id)
+  return true
+})
+let siblings = siblingDictionary(foundSiblings)
+return siblings;
+}
+
+function siblingDictionary(siblings){
+  let siblingsArray = []
+  if(!siblings[0]){
+    let siblingsString = "Siblings: None"
+    return siblingsString
+  }
+  else{
+    siblingsArray = siblings.map(function(person){
+      return ` ${person.firstName} ${person.lastName}`
+    })
+    let siblingsString = "Sibling(s): "
+    siblingsString += siblingsArray;
+    return siblingsString
+}};
+  
+ 

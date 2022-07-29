@@ -263,8 +263,8 @@ function findPersonFamily(personFound, people) {
 function displayPersonFamily(personFound, people) {
   let spouse = findPersonSpouse(personFound, people);
   let parents = findPersonParents(personFound, people);
-  let siblings = findPersonSibling(personFound, people)
-  return `${spouse}\n${parents}\n${siblings}`;
+  let siblings = findPersonSibling(personFound, people);
+  return `${spouse}\n${parents}\n${siblings}`
 }
 
 // \/\/\/ FindPersonSpouse \/\/\/ --- Filtering People Array to Find Person Spouse //////////////////////////
@@ -338,5 +338,15 @@ function siblingDictionary(siblings){
     siblingsString += siblingsArray;
     return siblingsString
 }};
+
+function findPersonDescendants(personFound,people){
+  let foundDescendants = people.filter(function(person){
+    if (person.parents.includes(personFound.id))
+    return true
+  });
+  return foundDescendants
+}
+
+
   
  

@@ -215,26 +215,37 @@ function searchByTraits(people) {
 // \/\/\/ TraitPrompts \/\/\/ --- Includes Prompts For TraitName and TraitsValue, Returns Array With Prompt Inputs//
 function traitPrompt() {
   let traits = [];
-  let traitPrompt = prompt(
+  let traitInput = prompt(
     "Please enter trait type\nPossible trait type: gender, dob, height, weight, eyecolor, occupation".trim()
   );
-  if (traitPrompt === "eyecolor") {
-    traitPrompt = "eyeColor";
-    traits.push(traitPrompt);
-  } else if (traitPrompt == "") {
+  if (
+    traitInput !== "gender" &&
+    traitInput !== "dob" &&
+    traitInput !== "height" &&
+    traitInput !== "weight" &&
+    traitInput !== "eyecolor" &&
+    traitInput !== "occupation".trim()
+  ) {
+    alert(`${traitInput} is not a valid trait! Please enter a valid trait`);
+    return traitPrompt();
+  }
+  if (traitInput === "eyecolor") {
+    traitInput = "eyeColor";
+    traits.push(traitInput);
+  } else if (traitInput == "") {
     return traitPrompt();
   } else {
-    traits.push(traitPrompt);
+    traits.push(traitInput);
   }
-  if (traitPrompt == "dob") {
+  if (traitInput == "dob") {
     alert("For DOB input, please format as M/D/YYYY");
     let traitValuePrompt = prompt(
-      `Exapmle: 2/16/1940 or 12/12/1940 or 12/6/1940\n\nPlease enter value for ${traitPrompt.toLowerCase()}`
+      `Exapmle: 2/16/1940 or 12/12/1940 or 12/6/1940\n\nPlease enter value for ${traitInput.toLowerCase()}`
     );
     traits.push(traitValuePrompt);
   } else {
     let traitValuePrompt = prompt(
-      `Please enter value for ${traitPrompt.toLowerCase()}`
+      `Please enter value for ${traitInput.toLowerCase()}`
     );
     traits.push(traitValuePrompt);
   }

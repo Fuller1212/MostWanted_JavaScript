@@ -344,9 +344,24 @@ function findPersonDescendants(personFound,people){
     if (person.parents.includes(personFound.id))
     return true
   });
-  return foundDescendants
+  let descendants = descendantsDictionary(foundDescendants)
+  return descendants
 }
 
-
+function descendantsDictionary(descendants){
+  let descendantsArray =[]
+  if(!descendants[0]){
+    let descendantsString = "Descendants: None"
+    return descendantsString
+  }
+  else{
+    descendantsArray = descendants.map(function(person){
+      return ` ${person.firstName} ${person.lastName}`
+    })
+    let descendantsString = "Descendant(s): "
+    descendantsString += descendantsArray
+    return descendantsString
+  }
+}
   
  

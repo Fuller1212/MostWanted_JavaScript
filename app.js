@@ -203,7 +203,8 @@ function searchByTraits(people) {
       alert("Could not find that individual. \n\nPlease start over!");
       return searchByTraits(people);
     } else if (peopleFound[0] && !peopleFound[1]) {
-      return mainMenu(peopleFound, people);
+      people = data;
+      mainMenu(peopleFound, people);
     } else {
       people = peopleFound;
       displayPeople(people);
@@ -264,7 +265,7 @@ function displayPersonFamily(personFound, people) {
   let spouse = findPersonSpouse(personFound, people);
   let parents = findPersonParents(personFound, people);
   let siblings = findPersonSibling(personFound, people);
-  return `${spouse}\n${parents}\n${siblings}`
+  return `${spouse}\n${parents}\n${siblings}`;
 }
 
 // \/\/\/ FindPersonSpouse \/\/\/ --- Filtering People Array to Find Person Spouse //////////////////////////
@@ -315,53 +316,54 @@ function parentsDictionary(parents) {
   }
 }
 
-function findPersonSibling(personFound,people){
-let foundSiblings = people.filter(function(person){
-  if(person.parents.includes(personFound.parents[0]) && personFound.id !== person.id || person.parents.includes(personFound.parents[1]) && personFound.id !== person.id)
-  return true
-})
-let siblings = siblingDictionary(foundSiblings)
-return siblings;
-}
-
-function siblingDictionary(siblings){
-  let siblingsArray = []
-  if(!siblings[0]){
-    let siblingsString = "Siblings: None"
-    return siblingsString
-  }
-  else{
-    siblingsArray = siblings.map(function(person){
-      return ` ${person.firstName} ${person.lastName}`
-    })
-    let siblingsString = "Sibling(s): "
-    siblingsString += siblingsArray;
-    return siblingsString
-}};
-
-function findPersonDescendants(personFound,people){
-  let foundDescendants = people.filter(function(person){
-    if (person.parents.includes(personFound.id))
-    return true
+function findPersonSibling(personFound, people) {
+  let foundSiblings = people.filter(function (person) {
+    if (
+      (person.parents.includes(personFound.parents[0]) &&
+        personFound.id !== person.id) ||
+      (person.parents.includes(personFound.parents[1]) &&
+        personFound.id !== person.id)
+    )
+      return true;
   });
-  let descendants = descendantsDictionary(foundDescendants)
-  return descendants
+  let siblings = siblingDictionary(foundSiblings);
+  return siblings;
 }
 
-function descendantsDictionary(descendants){
-  let descendantsArray =[]
-  if(!descendants[0]){
-    let descendantsString = "Descendants: None"
-    return descendantsString
-  }
-  else{
-    descendantsArray = descendants.map(function(person){
-      return ` ${person.firstName} ${person.lastName}`
-    })
-    let descendantsString = "Descendant(s): "
-    descendantsString += descendantsArray
-    return descendantsString
+function siblingDictionary(siblings) {
+  let siblingsArray = [];
+  if (!siblings[0]) {
+    let siblingsString = "Siblings: None";
+    return siblingsString;
+  } else {
+    siblingsArray = siblings.map(function (person) {
+      return ` ${person.firstName} ${person.lastName}`;
+    });
+    let siblingsString = "Sibling(s): ";
+    siblingsString += siblingsArray;
+    return siblingsString;
   }
 }
-  
- 
+
+function findPersonDescendants(personFound, people) {
+  let foundDescendants = people.filter(function (person) {
+    if (person.parents.includes(personFound.id)) return true;
+  });
+  let descendants = descendantsDictionary(foundDescendants);
+  return descendants;
+}
+
+function descendantsDictionary(descendants) {
+  let descendantsArray = [];
+  if (!descendants[0]) {
+    let descendantsString = "Descendants: None";
+    return descendantsString;
+  } else {
+    descendantsArray = descendants.map(function (person) {
+      return ` ${person.firstName} ${person.lastName}`;
+    });
+    let descendantsString = "Descendant(s): ";
+    descendantsString += descendantsArray;
+    return descendantsString;
+  }
+}

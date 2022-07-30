@@ -218,6 +218,9 @@ function traitPrompt() {
   let traitInput = prompt(
     "Please enter trait type\nPossible trait type: gender, dob, height, weight, eyecolor, occupation".trim()
   );
+  if(traitInput === null){
+    windows.location.reload()
+  }
   if (
     traitInput !== "gender" &&
     traitInput !== "dob" &&
@@ -363,6 +366,9 @@ function findPersonDescendants(personFound, people) {
   let descendants = descendantsDictionary(foundDescendants);
   return descendants;
 }
+
+
+
 
 function descendantsDictionary(descendants) {
   let descendantsArray = [];

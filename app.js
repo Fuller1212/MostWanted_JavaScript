@@ -219,7 +219,7 @@ function traitPrompt() {
     "Please enter trait type\nPossible trait type: gender, dob, height, weight, eyecolor, occupation".trim()
   );
   if(traitInput === null){
-    windows.location.reload()
+    return stop();
   }
   if (
     traitInput !== "gender" &&

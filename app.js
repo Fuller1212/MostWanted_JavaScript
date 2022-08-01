@@ -16,6 +16,7 @@
  * @param {Array} people        A collection of person objects.
  */
 function app(people) {
+  people = data;
   // promptFor() is a custom function defined below that helps us prompt and validate input more easily
   // Note that we are chaining the .toLowerCase() immediately after the promptFor returns its value
   let searchType = promptFor(
@@ -87,7 +88,7 @@ function mainMenu(person, people) {
       break;
     case "quit":
       // Stop application execution
-      return stop();
+      return app.stop();
     default:
       // Prompt user again. Another instance of recursion
       return mainMenu(person, people);
@@ -218,7 +219,7 @@ function traitPrompt() {
   let traitInput = prompt(
     "Please enter trait type\nPossible trait type: gender, dob, height, weight, eyecolor, occupation".trim()
   );
-  if(traitInput === null){
+  if (traitInput === null) {
     return stop();
   }
   if (
@@ -330,6 +331,7 @@ function parentsDictionary(parents) {
   }
 }
 
+// \/\/\/ FindPersonSiblings \/\/\/ --- Filtering People Array to Find Person Siblings ///////////////////////
 function findPersonSibling(personFound, people) {
   let foundSiblings = people.filter(function (person) {
     if (
@@ -344,6 +346,7 @@ function findPersonSibling(personFound, people) {
   return siblings;
 }
 
+// \/\/\/ SiblingsDictionary \/\/\/ --- Returns siblingsString as Interpolated String of Siblings Full Names //
 function siblingDictionary(siblings) {
   let siblingsArray = [];
   if (!siblings[0]) {
@@ -359,24 +362,44 @@ function siblingDictionary(siblings) {
   }
 }
 
+// \/\/\/ FindPersonDescendants \/\/\/ --- Returns personDescendants as String of Their Full Names  ///////////////////////
 function findPersonDescendants(personFound, people) {
-  let foundDescendants = people.filter(function (person) {
-    if (person.parents.includes(personFound.id)) return true;
-  });
-  let descendants = descendantsDictionary(foundDescendants);
+  let descentandsFound = descendantsFilterFunction(personFound, people);
+  let descendants = descendantsDictionary(descentandsFound);
   return descendants;
 }
 
-
-
-
+// \/\/\/ DescendantsFilterFunction \/\/\/ --- Filtering People Array to Find Person Descendants ///////////////////////
+function descendantsFilterFunction(personFound, people) {
+  if (!personFound[1]) {
+    let descendantsFound = people.filter(function (person) {
+      if (person.parents.includes(personFound.id)) {
+        return true;
+      }
+    });
+    personFound = descendantsFound;
+    if (personFound[0]) {
+      return descendantsFilterFunction(personFound, people);
+    }
+  } else if (personFound[1]) {
+    for (let i = 0; i < personFound.length; i++) {
+      people.filter(function (person) {
+        if (person.parents.includes(personFound[i].id)) {
+          personFound.push(person);
+          return true;
+        }
+      });
+    }
+  }
+  return personFound;
+}
+// \/\/\/ DescendantsDictionary \/\/\/ --- Returns descendantsString as Interpolated String of Descendants Full Names //
 function descendantsDictionary(descendants) {
-  let descendantsArray = [];
   if (!descendants[0]) {
     let descendantsString = "Descendants: None";
     return descendantsString;
   } else {
-    descendantsArray = descendants.map(function (person) {
+    let descendantsArray = descendants.map(function (person) {
       return ` ${person.firstName} ${person.lastName}`;
     });
     let descendantsString = "Descendant(s): ";
